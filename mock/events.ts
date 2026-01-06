@@ -17,4 +17,12 @@ export const eventsMock: Event[] = [
     capacity: 80,
     booked: 63,
   },
+  {
+    id: "e_003",
+    title: "Mini Meetup: Frontend Guild (5 seats)",
+    city: "Cebu",
+    startsAtISO: "2026-01-12T10:00:00.000Z",
+    capacity: 5,
+    booked: 3,
+  },
 ];

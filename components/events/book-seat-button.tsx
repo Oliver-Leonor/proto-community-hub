@@ -5,12 +5,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import type { Event } from "@/types/domain";
 import { sleep } from "@/lib/utils";
+import { bookSeatInDb } from "@/mock/events-db";
 
 async function bookSeatMock(eventId: string) {
-  // simulate network latency
   await sleep(350);
-  // always succeed (we can add failure simulation later)
-  return { ok: true, eventId };
+  const updated = bookSeatInDb(eventId);
+  if (!updated) throw new Error("Event not found");
+  return updated; // return updated Event
 }
 
 export function BookSeatButton({
@@ -47,6 +48,13 @@ export function BookSeatButton({
     // rollback if error (kept for “senior” completeness)
     onError: (_err, _vars, ctx) => {
       if (ctx?.prev) qc.setQueryData(["events"], ctx.prev);
+    },
+
+    onSuccess: (updatedEvent) => {
+      qc.setQueryData<Event[]>(["events"], (old) => {
+        if (!old) return old;
+        return old.map((e) => (e.id === updatedEvent.id ? updatedEvent : e));
+      });
     },
 
     // revalidate (here it’s mock, but mirrors real life)
