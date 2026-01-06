@@ -5,6 +5,7 @@ import type { MemberTier } from "@/types/domain";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   query: string;
@@ -13,6 +14,7 @@ type Props = {
   setCity: (v: string) => void;
   tier: MemberTier | "all";
   setTier: (v: MemberTier | "all") => void;
+  onClear: () => void;
 };
 
 const tierOptions: Array<{ label: string; value: MemberTier | "all" }> = [
@@ -29,6 +31,7 @@ export function MemberFilters({
   setCity,
   tier,
   setTier,
+  onClear,
 }: Props) {
   return (
     <div className="space-y-3">
@@ -79,6 +82,14 @@ export function MemberFilters({
             </button>
           );
         })}
+      </div>
+      <div className="flex items-center justify-between pt-1">
+        <div className="text-xs text-zinc-600 dark:text-zinc-400">
+          Tip: filters sync to the URL
+        </div>
+        <Button variant="ghost" onClick={onClear}>
+          Clear
+        </Button>
       </div>
     </div>
   );
