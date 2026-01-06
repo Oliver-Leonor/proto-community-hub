@@ -1,5 +1,6 @@
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-client";
+import { Nav } from "@/components/layout/nav";
 
 export default function RootLayout({
   children,
@@ -9,7 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <Nav />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

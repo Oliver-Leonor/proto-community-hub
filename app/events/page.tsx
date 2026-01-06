@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/events/event-card";
+import { BackHome } from "@/components/layout/back-home";
 
 import type { Event } from "@/types/domain";
 import { listEvents, resetEventsDb } from "@/mock/events-db";
@@ -77,6 +78,7 @@ export default function EventsPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4 p-6">
+      <BackHome />
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-3">

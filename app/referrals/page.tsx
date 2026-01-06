@@ -9,6 +9,7 @@ import { z } from "zod";
 import { ReferralCard } from "@/components/referrals/referral-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { BackHome } from "@/components/layout/back-home";
 
 import type { Referral } from "@/types/domain";
 import { referralSchema } from "@/lib/validators";
@@ -156,6 +157,7 @@ export default function ReferralsPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-3 p-6">
+      <BackHome />
       <ReferralCard
         referral={referral}
         link={link}

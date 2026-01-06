@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MemberCard } from "@/components/members/member-card";
 import { MemberDrawer } from "@/components/members/member-drawer";
 import { MemberFilters } from "@/components/members/member-filters";
+import { BackHome } from "@/components/layout/back-home";
 
 import type { Member, MemberTier } from "@/types/domain";
 import { membersMock } from "@/mock/members";
@@ -208,6 +209,7 @@ export default function MembersPage() {
 
   return (
     <div className="mx-auto w-full max-w-6xl space-y-4 p-6">
+      <BackHome />
       <Card>
         <CardHeader>
           <div className="text-lg font-semibold">Members</div>
