@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+  // ✅ remove reactCompiler (not supported in Next 15.5.9)
 };
 
 export default nextConfig;
