@@ -18,8 +18,16 @@ export type Event = {
   booked: number;
 };
 
+export type InviteEvent = {
+  id: string;
+  inviteeName: string;
+  inviteeCity: string;
+  acceptedAtISO: string;
+};
+
 export type Referral = {
   code: string;
   createdAtISO: string;
   invitedCount: number;
+  invites: InviteEvent[];
 };

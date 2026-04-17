@@ -24,8 +24,16 @@ export const eventSchema = z.object({
   booked: z.number().int().nonnegative(),
 });
 
+export const inviteEventSchema = z.object({
+  id: z.string(),
+  inviteeName: z.string(),
+  inviteeCity: z.string(),
+  acceptedAtISO: z.string(),
+});
+
 export const referralSchema = z.object({
   code: z.string(),
   createdAtISO: z.string(),
   invitedCount: z.number().int().nonnegative(),
+  invites: z.array(inviteEventSchema),
 });

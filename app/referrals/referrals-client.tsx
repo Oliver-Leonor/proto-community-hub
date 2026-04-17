@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import { z } from "zod";
 
 import { ReferralCard } from "@/components/referrals/referral-card";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +11,7 @@ import { BackHome } from "@/components/layout/back-home";
 
 import type { Referral } from "@/types/domain";
 import { referralSchema } from "@/lib/validators";
-import { sleep } from "@/lib/utils";
+import { simulatedLatency } from "@/lib/utils";
 import {
   getReferral,
   generateNewReferral,
@@ -21,27 +19,28 @@ import {
   simulateInvite,
 } from "@/mock/referrals-db";
 
-const referralZ = referralSchema;
-
 async function fetchReferral(): Promise<Referral> {
-  await sleep(250);
-  return referralZ.parse(getReferral());
+  await simulatedLatency();
+  return referralSchema.parse(getReferral());
 }
 
 async function generateReferralMutation(): Promise<Referral> {
-  await sleep(250);
-  return referralZ.parse(generateNewReferral());
+  await simulatedLatency();
+  return referralSchema.parse(generateNewReferral());
 }
 
 async function simulateInviteMutation(): Promise<Referral> {
-  await sleep(150);
-  return referralZ.parse(simulateInvite());
+  await simulatedLatency();
+  return referralSchema.parse(simulateInvite());
 }
 
 export default function ReferralsPage() {
   const qc = useQueryClient();
   const sp = useSearchParams();
   const debug = sp.get("debug") === "1";
+
+  // Declare UI state first so handlers can reference it without relying on hoisting
+  const [copied, setCopied] = React.useState(false);
 
   const referralQ = useQuery({
     queryKey: ["referral"],
@@ -54,7 +53,7 @@ export default function ReferralsPage() {
       await qc.cancelQueries({ queryKey: ["referral"] });
       const prev = qc.getQueryData<Referral>(["referral"]);
 
-      // optimistic: new code immediately (still valid)
+      // Optimistic: show the code immediately; count/invites reset
       const optimistic: Referral = {
         code: `FRONTIER-${Math.random()
           .toString(36)
@@ -62,6 +61,7 @@ export default function ReferralsPage() {
           .toUpperCase()}`,
         createdAtISO: new Date().toISOString(),
         invitedCount: 0,
+        invites: [],
       };
       qc.setQueryData(["referral"], optimistic);
 
@@ -84,9 +84,10 @@ export default function ReferralsPage() {
       await qc.cancelQueries({ queryKey: ["referral"] });
       const prev = qc.getQueryData<Referral>(["referral"]);
 
+      // Optimistic: bump the count immediately so the badge updates instantly.
+      // The real invitee name/city fills in when the mutation resolves.
       qc.setQueryData<Referral>(["referral"], (old) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (!old) return old as any;
+        if (!old) return old;
         return { ...old, invitedCount: old.invitedCount + 1 };
       });
 
@@ -105,27 +106,26 @@ export default function ReferralsPage() {
 
   async function handleCopy(link: string) {
     try {
-      // delegate copy to component utility by clicking “Copy link”
-      // but we’ll also show immediate feedback here with a tiny state
-      // (keeps it demo-friendly without adding toast libs)
       await navigator.clipboard.writeText(link);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
     } catch {
-      // if clipboard is blocked, the component has a fallback
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
+      // If clipboard is blocked, we still show the "copied" affordance so the
+      // user gets visual feedback; the fallback inside the card covers this.
     }
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1200);
   }
 
-  const [copied, setCopied] = React.useState(false);
+  function handleReset() {
+    resetReferralDb();
+    qc.invalidateQueries({ queryKey: ["referral"] });
+  }
 
   if (referralQ.isLoading) {
     return (
       <div className="mx-auto w-full max-w-3xl p-6">
         <Card>
           <CardContent className="p-4 text-sm text-zinc-600 dark:text-zinc-400">
-            Loading referrals…
+            Loading referrals...
           </CardContent>
         </Card>
       </div>
@@ -145,15 +145,8 @@ export default function ReferralsPage() {
   }
 
   const referral = referralQ.data;
-
-  // We don’t know their real domain; keep it clearly “demo”.
   const base = "https://demo.network-society.example/join";
   const link = `${base}?ref=${encodeURIComponent(referral.code)}`;
-
-  function handleReset() {
-    resetReferralDb();
-    qc.invalidateQueries({ queryKey: ["referral"] });
-  }
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-3 p-6">
@@ -161,6 +154,7 @@ export default function ReferralsPage() {
       <ReferralCard
         referral={referral}
         link={link}
+        copied={copied}
         onCopy={() => handleCopy(link)}
         onGenerate={() => genM.mutate()}
         onSimulateInvite={() => inviteM.mutate()}
@@ -169,9 +163,9 @@ export default function ReferralsPage() {
 
       <div className="flex items-center justify-between">
         <div className="text-xs text-zinc-600 dark:text-zinc-400">
-          {copied
-            ? "Copied!"
-            : "Tip: open /referrals?debug=1 to simulate invites + reset."}
+          {debug
+            ? "Debug mode: simulate invites and reset the mock DB."
+            : "Tip: open /referrals?debug=1 to simulate invites."}
         </div>
 
         {debug ? (

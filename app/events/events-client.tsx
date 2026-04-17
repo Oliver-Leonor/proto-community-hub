@@ -14,13 +14,13 @@ import { BackHome } from "@/components/layout/back-home";
 
 import type { Event } from "@/types/domain";
 import { listEvents, resetEventsDb } from "@/mock/events-db";
-import { sleep } from "@/lib/utils";
+import { simulatedLatency } from "@/lib/utils";
 import { eventSchema } from "@/lib/validators";
 
 const eventsArraySchema = z.array(eventSchema);
 
 async function fetchEventsMock(): Promise<Event[]> {
-  await sleep(350);
+  await simulatedLatency();
   const validated = eventsArraySchema.parse(listEvents());
 
   return [...validated].sort(

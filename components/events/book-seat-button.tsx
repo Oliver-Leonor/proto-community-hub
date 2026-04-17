@@ -4,11 +4,11 @@ import * as React from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import type { Event } from "@/types/domain";
-import { sleep } from "@/lib/utils";
+import { simulatedLatency } from "@/lib/utils";
 import { bookSeatInDb } from "@/mock/events-db";
 
 async function bookSeatMock(eventId: string) {
-  await sleep(350);
+  await simulatedLatency();
   const updated = bookSeatInDb(eventId);
   if (!updated) throw new Error("Event not found");
   return updated; // return updated Event

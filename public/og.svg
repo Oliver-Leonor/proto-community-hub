@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#1c1c1c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="85%" cy="15%" r="60%">
+      <stop offset="0%" stop-color="#27272a" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#27272a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Top eyebrow -->
+  <g transform="translate(80, 100)">
+    <rect x="0" y="0" width="8" height="8" rx="2" fill="#a1a1aa"/>
+    <text x="20" y="9" font-family="ui-monospace, 'SF Mono', monospace" font-size="18" font-weight="500" fill="#a1a1aa" letter-spacing="2">PROTO COMMUNITY HUB</text>
+  </g>
+
+  <!-- Main headline -->
+  <text x="80" y="280" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI'" font-size="74" font-weight="600" fill="#fafafa" letter-spacing="-2">A lightweight operating</text>
+  <text x="80" y="365" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI'" font-size="74" font-weight="600" fill="#fafafa" letter-spacing="-2">system for your community.</text>
+
+  <!-- Subline -->
+  <text x="80" y="425" font-family="ui-sans-serif, system-ui" font-size="26" font-weight="400" fill="#a1a1aa">Members. Events. Referrals. One focused app.</text>
+
+  <!-- Feature row -->
+  <g transform="translate(80, 510)">
+    <g>
+      <rect x="0" y="0" width="220" height="52" rx="26" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+      <text x="110" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="500" fill="#fafafa">Members directory</text>
+    </g>
+    <g transform="translate(240, 0)">
+      <rect x="0" y="0" width="180" height="52" rx="26" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+      <text x="90" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="500" fill="#fafafa">Event booking</text>
+    </g>
+    <g transform="translate(440, 0)">
+      <rect x="0" y="0" width="220" height="52" rx="26" fill="#18181b" stroke="#27272a" stroke-width="1"/>
+      <text x="110" y="34" text-anchor="middle" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="500" fill="#fafafa">Referral tracking</text>
+    </g>
+  </g>
+
+  <!-- Author -->
+  <text x="80" y="595" font-family="ui-monospace, 'SF Mono', monospace" font-size="16" fill="#71717a" letter-spacing="1">BY OLIVER LEONOR · OLIVER-LEONOR.VERCEL.APP</text>
+</svg>

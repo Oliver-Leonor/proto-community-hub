@@ -14,7 +14,7 @@ import { MemberFilters } from "@/components/members/member-filters";
 
 import type { Member, MemberTier } from "@/types/domain";
 import { membersMock } from "@/mock/members";
-import { sleep } from "@/lib/utils";
+import { simulatedLatency } from "@/lib/utils";
 import { memberSchema } from "@/lib/validators";
 
 const membersArraySchema = z.array(memberSchema);
@@ -58,7 +58,7 @@ async function fetchMembersPage(args: {
   city: string;
   tier: MemberTier | "all";
 }): Promise<{ items: Member[]; nextCursor: number | null; total: number }> {
-  await sleep(350);
+  await simulatedLatency();
 
   const all = membersArraySchema.parse(membersMock);
 
